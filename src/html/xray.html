@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>X-Ray Visualizer — Junni Tech</title>
+	<link rel="icon" href="./assets/favicon.png" type="image/png">
+	<style>
+		* { box-sizing: border-box; }
+		body { margin: 0; background: #000; color: #fff; font-family: system-ui, sans-serif; }
+		.xray-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(0,0,0,0.7); border-bottom: 1px solid rgba(255,255,255,0.1); }
+		.xray-header a { color: #00d4aa; text-decoration: none; font-weight: 600; }
+		.xray-header a:hover { text-decoration: underline; }
+		.xray-frame { position: fixed; top: 52px; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100% - 52px); border: none; }
+	</style>
+</head>
+<body>
+	<div class="xray-header">
+		<a href="./ai.html">← Back to AI</a>
+		<span>X-Ray Visualizer</span>
+	</div>
+	<iframe class="xray-frame" src="./xray/index.html" title="X-Ray Visualizer"></iframe>
+</body>
+</html>

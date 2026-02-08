@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Junni Tech — AI</title>
+	<link rel="icon" href="./assets/favicon.png" type="image/png">
+	<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+	<style>
+		*, *::after, *::before { box-sizing: border-box; }
+		:root {
+			--white: #fff;
+			--black: #000;
+			--red: #cc2222;
+			--gray: #888;
+			--gray-light: #aaa;
+		}
+		body { margin: 0; color: var(--white); background: var(--black); font-family: 'Space Mono', monospace; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+		.ai-page { min-height: 100vh; position: relative; }
+		.ai-page::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+
+		.header { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; }
+		.header-logo { font-family: 'VT323', monospace; font-size: 2rem; font-weight: 400; color: var(--white); text-decoration: none; letter-spacing: 0.05em; }
+		.header-nav { display: flex; align-items: center; gap: 32px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+		.header-nav a { color: var(--gray); text-decoration: none; }
+		.header-nav a:hover, .header-nav a.active { color: var(--white); }
+		.header-nav .nav-projects { display: flex; align-items: center; gap: 8px; }
+		.header-nav .nav-projects::before { content: '■'; color: var(--red); font-size: 0.6em; }
+		.header-talk { color: var(--gray); text-decoration: none; font-size: 0.85rem; }
+		.header-talk:hover { color: var(--white); }
+
+		.main { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 48px; max-width: 1400px; margin: 0 auto; padding: 48px 32px 80px; }
+		@media (max-width: 1024px) { .main { grid-template-columns: 1fr 1fr; } }
+		@media (max-width: 768px) { .main { grid-template-columns: 1fr; } }
+
+		.col-left { }
+		.brand-name { font-family: 'VT323', monospace; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; letter-spacing: 0.05em; line-height: 1.1; margin-bottom: 12px; }
+		.brand-tagline { font-size: 0.8rem; color: var(--gray-light); line-height: 1.6; max-width: 280px; }
+
+		.col-center { display: flex; flex-direction: column; align-items: flex-start; }
+		.section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 24px; }
+		.hero-piggy { width: 260px; height: 260px; margin-bottom: 24px; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); cursor: grab; touch-action: none; display: flex; align-items: center; justify-content: center; transition: border-color .2s, box-shadow .2s; }
+		.hero-piggy:hover { border-color: var(--red); box-shadow: 0 0 24px rgba(204,34,34,0.2); }
+		.hero-piggy:active { cursor: grabbing; }
+		.hero-piggy canvas { display: block; width: 100% !important; height: 100% !important; }
+		.hero-piggy .piggy-svg { width: 55%; height: 55%; }
+		.play-btn { display: inline-flex; align-items: center; gap: 12px; padding: 12px 24px; font-family: 'VT323', monospace; font-size: 1.2rem; color: var(--white); background: transparent; border: 1px solid var(--white); cursor: pointer; text-decoration: none; transition: background .2s, color .2s; }
+		.play-btn:hover { background: var(--white); color: var(--black); }
+		.play-btn svg { width: 16px; height: 16px; }
+
+		.col-right { }
+		.what-section { margin-bottom: 40px; }
+		.what-section h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 12px; }
+		.what-section p { font-size: 0.85rem; color: var(--gray-light); line-height: 1.6; }
+		.services-section h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gray); margin-bottom: 16px; }
+		.services-list { list-style: none; margin: 0; padding: 0; font-size: 0.85rem; color: var(--gray-light); }
+		.services-list li { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 10px; }
+		.services-list li::before { content: '•'; color: var(--red); }
+
+		.statement { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 32px 48px; }
+		.statement h2 { font-family: 'VT323', monospace; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; line-height: 1.15; letter-spacing: 0.02em; max-width: 900px; }
+
+		.footer { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 32px 32px 48px; font-size: 0.8rem; color: var(--gray); font-family: 'VT323', monospace; font-size: 1.1rem; }
+	</style>
+</head>
+<body>
+	<div class="ai-page">
+		<header class="header">
+			<a href="./index.html" class="header-logo">J</a>
+			<nav class="header-nav">
+				<a href="./flight.html" class="nav-projects">Projects</a>
+				<a href="#about">About</a>
+				<a href="./xray.html">D.O.T</a>
+			</nav>
+			<a href="#helper" class="header-talk">Talk</a>
+		</header>
+
+		<main class="main">
+			<div class="col-left">
+				<h1 class="brand-name">Junni Tech</h1>
+				<p class="brand-tagline">Your personal brand for AI & digital experiences. Docs, API, helper — everything in one place.</p>
+			</div>
+			<div class="col-center">
+				<span class="section-label">Design & Engineering</span>
+				<div class="hero-piggy" id="piggy3d" title="Drag to rotate">
+					<svg class="piggy-svg" viewBox="0 0 51 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M46.2473 6.9677C46.3078 6.9677 46.3783 6.97769 46.4388 6.97769C47.3861 6.97769 48.152 6.21879 48.152 5.28016C48.152 4.34153 47.3861 3.58264 46.4388 3.58264C45.4914 3.58264 44.7255 4.34153 44.7255 5.28016C44.7255 5.50983 44.7759 5.73949 44.8565 5.9392C43.2238 4.9107 41.2687 4.26165 39.112 4.09189C31.2712 3.4728 29.5075 4.80086 24.8716 5.26019C26.2825 4.40144 25.3553 1.85515 25.2646 1.49568C25.1739 1.11623 25.2646 0.926506 24.6499 1.02636C22.2412 1.88511 21.6567 4.35152 21.6063 5.40997C21.5458 5.40997 21.4753 5.40997 21.4148 5.40997C21.1528 5.40997 20.8907 5.40997 20.6388 5.40997C22.2009 4.23169 20.5884 2.51419 20.6791 2.10479C20.7698 1.6854 20.5884 1.53562 19.9636 1.96499C19.1371 2.53416 18.3914 4.79088 18.341 5.44992H18.3914C15.2772 5.5997 13.05 5.95917 12.3143 6.15888C10.1878 6.71807 3.37498 7.98622 1.38959 13.628C-0.0112713 17.6122 2.65943 20.1884 4.7456 20.6777C6.36818 21.0572 6.74107 19.3596 6.1263 19.0301C6.93255 16.9132 13.0701 25.1612 19.6411 16.6736C21.0016 14.9161 22.0699 22.4751 13.695 20.5879C12.5864 20.3382 16.2951 23.5236 14.6927 27.7075C14.1686 29.0755 15.4082 30.0141 16.0734 30.0141C18.1697 30.0141 17.9782 28.5562 17.9782 26.9486C17.9782 22.8546 21.9187 24.7019 22.3218 26.7489C22.4932 27.6076 22.6846 28.8358 22.0699 30.3936C21.5861 31.6118 22.6947 33.1396 24.3576 32.9898C26.4035 32.8001 26.4539 31.0127 25.8794 29.3551C25.0026 26.8188 26.2321 25.0214 28.3989 24.7817C31.1906 24.4722 33.9923 24.1826 36.2196 24.0828C36.5421 24.5022 36.6731 25.0813 36.4614 25.7004C36.1591 26.6091 35.4637 27.9671 37.2374 28.3166C39.2934 28.716 39.7671 27.2981 39.3639 26.2995C38.9003 25.1612 39.0817 24.3823 39.8174 24.2226C40.1702 24.3024 40.4221 24.4023 40.5834 24.5521C41.4299 25.3409 41.9036 26.2396 41.5811 27.1882C41.0268 28.8658 40.533 30.6432 42.7703 30.9128C45.5317 31.2423 45.8643 29.405 45.5317 27.8473C45.2697 26.6091 45.9953 26.4194 47.4365 23.9829C51.5887 16.9532 50.339 10.5325 46.2473 6.9677V6.9677ZM43.1231 17.762C41.4299 20.3183 38.3662 21.9159 30.596 22.1556C32.531 21.3567 32.6922 20.6378 32.7325 20.1984C32.9542 17.7819 28.671 15.7849 27.0888 12.4897C25.5972 9.3742 27.4012 6.72805 30.1425 6.40852C32.279 6.15888 34.6574 7.08753 35.3831 7.76654C35.3831 7.76654 36.1893 5.18031 40.2609 6.25874C45.8038 7.7266 45.6728 13.9076 43.1231 17.752V17.762Z" stroke="#cc2222" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(204,34,34,0.1)"/>
+					</svg>
+				</div>
+				<a href="./ai.html#helper" class="play-btn">
+					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+					Play Showreel
+				</a>
+			</div>
+			<div class="col-right">
+				<div class="what-section">
+					<h3>What I Do</h3>
+					<p>Junni — your personal tech companion. AI-powered docs, APIs, and helpers for building digital products with style.</p>
+				</div>
+				<div class="services-section">
+					<h3>Services</h3>
+					<ul class="services-list">
+						<li><a href="./flight.html" style="color:inherit;text-decoration:none;">Flight Tracker 3D</a></li>
+						<li><a href="./xray.html" style="color:inherit;text-decoration:none;">X-Ray Visualizer</a></li>
+						<li><a href="./ai.html" style="color:inherit;text-decoration:none;">Docs & API</a></li>
+						<li>Helper & Chat</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+
+		<section class="statement">
+			<h2>I bring the unexpected to brand & digital experiences</h2>
+		</section>
+
+		<section id="helper" style="position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 32px 64px;">
+			<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:32px;">
+				<h3 style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--gray);margin-bottom:16px;">Helper — Live</h3>
+				<div id="chatArea" style="height:180px;background:rgba(0,0,0,0.3);border-radius:8px;padding:16px;margin-bottom:12px;overflow-y:auto;font-size:0.85rem;">
+					<div style="color:var(--red);margin-bottom:12px;">Junni AI: Hi! Ask me anything.</div>
+				</div>
+				<div style="display:flex;gap:8px;">
+					<input type="text" placeholder="Type a message..." id="chatInput" style="flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:10px 14px;color:var(--white);font-size:0.9rem;">
+					<button type="button" id="chatSend" style="background:var(--red);color:var(--white);border:none;border-radius:4px;padding:10px 24px;font-weight:600;cursor:pointer;">Send</button>
+				</div>
+			</div>
+		</section>
+
+		<footer class="footer">BigBiJrKTWTaoQwxCrNjsQzyDfyYwe3vLkhT4S6ppump</footer>
+	</div>
+
+	<script type="importmap">
+		{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+	</script>
+	<script type="module">
+		import * as THREE from 'three';
+		import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+		import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+		var container = document.getElementById('piggy3d');
+		if (!container) return;
+		var w = 260, h = 260;
+		var scene = new THREE.Scene();
+		scene.background = null;
+		var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+		camera.position.set(0, 0, 4);
+		var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+		renderer.setSize(w, h);
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		renderer.setClearColor(0x000000, 0);
+		renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+		scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+		var dir = new THREE.DirectionalLight(0xffffff, 0.8);
+		dir.position.set(2, 2, 3);
+		scene.add(dir);
+		var dir2 = new THREE.DirectionalLight(0xcc2222, 0.2);
+		dir2.position.set(-1, 1, 2);
+		scene.add(dir2);
+
+		var controls = new OrbitControls(camera, renderer.domElement);
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.05;
+		controls.minDistance = 2;
+		controls.maxDistance = 8;
+		controls.autoRotate = true;
+		controls.autoRotateSpeed = 0.6;
+
+		function addFallbackPig() {
+			var g = new THREE.Group();
+			var body = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.3, metalness: 0.1 }));
+			var head = new THREE.Mesh(new THREE.SphereGeometry(0.35, 24, 24), new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.3, metalness: 0.1 }));
+			head.position.set(0.35, 0.1, 0.35);
+			var snout = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 16), new THREE.MeshStandardMaterial({ color: 0xcc2222, roughness: 0.5 }));
+			snout.position.set(0.5, 0.05, 0.5);
+			g.add(body); g.add(head); g.add(snout);
+			g.scale.setScalar(1.2);
+			scene.add(g);
+		}
+
+		var loader = new GLTFLoader();
+		loader.load('./assets/scene/baku.glb', function(gltf) {
+			var model = gltf.scene;
+			scene.add(model);
+			var box = new THREE.Box3().setFromObject(model);
+			var center = box.getCenter(new THREE.Vector3());
+			var size = box.getSize(new THREE.Vector3());
+			model.position.sub(center);
+			var maxDim = Math.max(size.x, size.y, size.z) || 1;
+			model.scale.setScalar(1.8 / maxDim);
+			container.innerHTML = '';
+			container.appendChild(renderer.domElement);
+		}, undefined, function(err) {
+			console.warn('Baku load error', err);
+			addFallbackPig();
+			container.innerHTML = '';
+			container.appendChild(renderer.domElement);
+		});
+
+		function animate() {
+			requestAnimationFrame(animate);
+			controls.update();
+			renderer.render(scene, camera);
+		}
+		animate();
+	</script>
+	<script>
+		if (document.getElementById('chatSend')) {
+			document.getElementById('chatSend').addEventListener('click', function() {
+				var input = document.getElementById('chatInput');
+				var msg = input && input.value ? input.value.trim() : '';
+				if (!msg) return;
+				var area = document.getElementById('chatArea');
+				if (area) {
+					var you = document.createElement('div'); you.style.marginBottom = '12px'; you.textContent = 'You: ' + msg; area.appendChild(you);
+					var bot = document.createElement('div'); bot.style.color = 'var(--red)'; bot.style.marginBottom = '12px'; bot.textContent = 'Junni AI: (Reply placeholder)'; area.appendChild(bot);
+					area.scrollTop = area.scrollHeight;
+				}
+				if (input) input.value = '';
+			});
+		}
+		if (document.getElementById('chatInput')) document.getElementById('chatInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('chatSend').click(); });
+	</script>
+</body>
+</html>

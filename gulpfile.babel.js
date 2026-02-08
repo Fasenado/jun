@@ -140,6 +140,12 @@ const copy = ( c ) => {
 	
 }
 
+const copyApps = ( c ) => {
+	gulp.src( [ '_repos/flights-tracker/dist/**/*' ], { allowEmpty: true } ).pipe( gulp.dest( outDir + '/flight/' ) );
+	gulp.src( [ '_repos/xray-visualizer/dist/**/*' ], { allowEmpty: true } ).pipe( gulp.dest( outDir + '/xray/' ) );
+	c();
+}
+
 const brSync = () => {
 
 	browserSync.init( {
@@ -198,6 +204,7 @@ exports.build = gulp.series(
 	setPrdMode,
 	gulp.parallel( buildWebpack, buildSass ),
 	copy,
+	copyApps,
 )
 
 exports.lint = gulp.task( lint );

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Flight Tracker — Junni Tech</title>
+	<link rel="icon" href="./assets/favicon.png" type="image/png">
+	<style>
+		* { box-sizing: border-box; }
+		body { margin: 0; background: #000; color: #fff; font-family: system-ui, sans-serif; }
+		.flight-header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(0,0,0,0.7); border-bottom: 1px solid rgba(255,255,255,0.1); }
+		.flight-header a { color: #00d4aa; text-decoration: none; font-weight: 600; }
+		.flight-header a:hover { text-decoration: underline; }
+		.flight-frame { position: fixed; top: 52px; left: 0; right: 0; bottom: 0; width: 100%; height: calc(100% - 52px); border: none; }
+	</style>
+</head>
+<body>
+	<div class="flight-header">
+		<a href="./ai.html">← Back to AI</a>
+		<span>Flight Tracker 3D</span>
+	</div>
+	<iframe class="flight-frame" src="./flight/index.html" title="Flight Tracker"></iframe>
+</body>
+</html>
