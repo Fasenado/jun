@@ -1,6 +1,6 @@
 /public
 /node_modules
-_repos/
+_repos/*/node_modules
 .DS_Store
 *.blend?*
 *.Identifier

@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "npx gulp",
-    "build": "npx gulp build"
+    "build": "node scripts/setup-apps.js && npx gulp build",
+    "build:gulp": "npx gulp build"
   },
   "author": "junni",
   "bugs": {
