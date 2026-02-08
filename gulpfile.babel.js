@@ -10,7 +10,7 @@ import del from 'del';
 // css
 import gulpSass from 'gulp-sass';
 import dartSass from 'sass';
-import cssmin from 'gulp-cssmin';
+import cleanCSS from 'gulp-clean-css';
 import autoprefixer from 'gulp-autoprefixer';
 const sass = gulpSass( dartSass );
 
@@ -125,7 +125,7 @@ const buildSass = () => {
 		} } ) )
 		.pipe( sass() )
 		.pipe( autoprefixer( [ 'last 2 versions'] ) )
-		.pipe( cssmin() )
+		.pipe( cleanCSS() )
 		.pipe( gulp.dest( outDir + '/css/' ) )
 		.pipe( browserSync.stream() );
 		
